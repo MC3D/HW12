@@ -13,16 +13,35 @@ function renderTemplate(templateId, location, model) {
   $(location).append(renderedTemplate);
 }
 
-$.ajax({
+
+// setInterval(function(){
+//   $.ajax({
+//     type: "GET",
+//     dataType: "json",
+//     url: "https://api.github.com/issues"
+//   });
+// },2000);
+
+setInterval($.ajax({
   type: "GET",
   dataType: "json",
   url: "https://api.github.com/issues"
-}).done(function(items) {
-  _.each(items, function(item) {
-  renderTemplate('#open', '#issues', item);
+  }).done(function(issues) {
+  _.each(issues, function(issue) {
+    renderTemplate('#open', '#issues', issue);
+    $.ajax({
+      type: "GET",
+      dataType: "json",
+      url: issue.comments_url
+    }).done(function(comments) {
+      _.each(comments, function(comment) {
+        renderTemplate('#text', '#comments', comment);
+      });
+    });
   });
-});
+}),10000);
 
+// https://api.github.com/repos/TIY-GVL-FEE-2014-Aug/Assignments/issues/149/comments
 
 
 // "https://api.github.com/repos/TIY-GVL-FEE-2014-Aug/Assignments/issues/149/comments"
