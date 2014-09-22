@@ -13,33 +13,55 @@ function renderTemplate(templateId, location, model) {
   $(location).append(renderedTemplate);
 }
 
+//GET REQUEST TO THE SERVER
+$.ajax({
+  type:"GET",
+  dataType: "json",
+  url: "https://api.github.com/issues"
+//RETURN TITLE FOR EACH ISSUE USING THE RENDER TEMPLATE ONCE THE GET REQUEST IS DONE
+}).done(function(issues){
+  _.each(issues,function(issue){
+    renderTemplate('#open','#issues',issue);
+  });
+});
 
-// setInterval(function(){
+
 //   $.ajax({
 //     type: "GET",
 //     dataType: "json",
 //     url: "https://api.github.com/issues"
+//   }).done(function(issues) {
+//   _.each(issues, function(issue) {
+//     renderTemplate('#open', '#issues', issue);
+//     $.ajax({
+//       type: "GET",
+//       dataType: "json",
+//       url: issue.comments_url
+//     }).done(function(comments) {
+//       _.each(comments, function(comment) {
+//         renderTemplate('#text', '#comments', comment);
+//       });
+//     });
 //   });
-// },2000);
-
-setInterval($.ajax({
-  type: "GET",
-  dataType: "json",
-  url: "https://api.github.com/issues"
-  }).done(function(issues) {
-  _.each(issues, function(issue) {
-    renderTemplate('#open', '#issues', issue);
-    $.ajax({
-      type: "GET",
-      dataType: "json",
-      url: issue.comments_url
-    }).done(function(comments) {
-      _.each(comments, function(comment) {
-        renderTemplate('#text', '#comments', comment);
-      });
-    });
-  });
-}),10000);
+// });
+// setInterval($.ajax({
+//   type: "GET",
+//   dataType: "json",
+//   url: "https://api.github.com/issues"
+//   }).done(function(issues) {
+//   _.each(issues, function(issue) {
+//     renderTemplate('#open', '#issues', issue);
+//     $.ajax({
+//       type: "GET",
+//       dataType: "json",
+//       url: issue.comments_url
+//     }).done(function(comments) {
+//       _.each(comments, function(comment) {
+//         renderTemplate('#text', '#comments', comment);
+//       });
+//     });
+//   });
+// }),10000);
 
 // https://api.github.com/repos/TIY-GVL-FEE-2014-Aug/Assignments/issues/149/comments
 
